@@ -20,24 +20,6 @@ void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent * BarrelToSet
 	Barrel = BarrelToSet;
 }
 
-// Called when the game starts
-void UTankAimingComponent::BeginPlay()
-{
-	Super::BeginPlay();
-
-	// ...
-	
-}
-
-
-// Called every frame
-void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
-
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 {
 	if (!Barrel) return;
@@ -52,18 +34,26 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 			StartLocation,
 			HitLocation,
 			LaunchSpeed,
-			false,
-			0.0f,
-			0.0f,
-			ESuggestProjVelocityTraceOption::DoNotTrace,
-			FCollisionResponseParams::DefaultResponseParam,
-			TArray<AActor*>(),
 			false)
 		)
 	{
 		auto AimDirection = LaunchVelocity.GetSafeNormal();
+		MoveBarrel(AimDirection);
 		UE_LOG(LogTemp, Warning, TEXT("Tank %s is aiming at %s"), *GetOwner()->GetName(), *AimDirection.ToString());
 	}
 
+}
+
+void UTankAimingComponent::MoveBarrel(FVector AimDirection) {
+	// Find rotation required
+	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
+	auto AimAsRotator = AimDirection.Rotation();
+	auto DeltaRotator = AimAsRotator - BarrelRotator;
+
+	UE_LOG(LogTemp, Warning, TEXT("AimAsRotator: %s"), *AimAsRotator.ToString());
+	// Rotate turret to required angle
+
+
+	// Raise turrent to required angle
 }
 
