@@ -5,6 +5,9 @@
 
 
 void ATankAIController::BeginPlay() {
+	Super::BeginPlay();
+	PrimaryActorTick.bCanEverTick = true;
+
 	auto ControlledTank = GetControlledTank();
 	auto PlayerController = GetPlayerTank();
 
@@ -24,4 +27,16 @@ ATank *ATankAIController::GetPlayerTank() const {
 	auto PlayerController = GetWorld()->GetFirstPlayerController()->GetPawn();
 
 	return Cast<ATank>(PlayerController);
+}
+
+void ATankAIController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	auto CurrentTank = GetControlledTank();
+	auto PlayerTank = GetPlayerTank();
+
+	if (PlayerTank && CurrentTank)
+		CurrentTank->AimAt(PlayerTank->GetActorLocation());
+
 }

@@ -1,7 +1,7 @@
 // MIT License
 
 #include "TankBattle.h"
-#include "Tank.h"
+#include "../Public/Tank.h"
 
 
 // Sets default values
@@ -31,5 +31,10 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void ATank::AimAt(FVector HitLocation)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Tank %s aiming at %s"), *GetName(), *HitLocation.ToString());
 }
 
