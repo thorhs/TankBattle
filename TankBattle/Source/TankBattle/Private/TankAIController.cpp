@@ -1,6 +1,7 @@
 // MIT License
 
 #include "TankBattle.h"
+#include "Public/Tank.h"
 #include "Public/TankAIController.h"
 
 

@@ -2,6 +2,8 @@
 
 #include "TankBattle.h"
 #include "../Public/TankAimingComponent.h"
+#include "Public/TankBarrel.h"
+
 
 
 // Sets default values for this component's properties
@@ -15,7 +17,7 @@ UTankAimingComponent::UTankAimingComponent()
 }
 
 
-void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent * BarrelToSet)
+void UTankAimingComponent::SetBarrelReference(UTankBarrel * BarrelToSet)
 {
 	Barrel = BarrelToSet;
 }
@@ -34,12 +36,18 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 			StartLocation,
 			HitLocation,
 			LaunchSpeed,
-			false)
+			false,
+			0.0f,
+			0.0f,
+			ESuggestProjVelocityTraceOption::DoNotTrace)
 		)
 	{
 		auto AimDirection = LaunchVelocity.GetSafeNormal();
 		MoveBarrel(AimDirection);
 		UE_LOG(LogTemp, Warning, TEXT("Tank %s is aiming at %s"), *GetOwner()->GetName(), *AimDirection.ToString());
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("Unable to get an aiming solution"));
 	}
 
 }
@@ -50,10 +58,10 @@ void UTankAimingComponent::MoveBarrel(FVector AimDirection) {
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
 
-	UE_LOG(LogTemp, Warning, TEXT("AimAsRotator: %s"), *AimAsRotator.ToString());
 	// Rotate turret to required angle
 
 
-	// Raise turrent to required angle
+	// Raise barrel to required angle
+	Barrel->Elevate(DeltaRotator.Pitch);
 }
 
