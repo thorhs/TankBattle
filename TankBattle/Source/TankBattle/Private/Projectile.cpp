@@ -1,7 +1,7 @@
 // MIT License
 
 #include "TankBattle.h"
-#include "Projectile.h"
+#include "Public/Projectile.h"
 
 
 // Sets default values
@@ -9,6 +9,9 @@ AProjectile::AProjectile()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(FName("Projectile Movement"));
+	ProjectileMovementComponent->bAutoActivate = false;
 
 }
 
@@ -26,3 +29,8 @@ void AProjectile::Tick(float DeltaTime)
 
 }
 
+void AProjectile::LaunchProjectile(float Speed) {
+	ProjectileMovementComponent->SetVelocityInLocalSpace(FVector::ForwardVector * Speed);
+	ProjectileMovementComponent->Activate();
+
+}
